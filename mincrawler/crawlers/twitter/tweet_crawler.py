@@ -1,4 +1,5 @@
 import copy
+import logging
 import typing as tp
 from urllib.parse import urlencode
 
@@ -8,6 +9,8 @@ from authlib.integrations.httpx_client import OAuth1Auth
 
 from mincrawler.crawlers.crawler import Crawler
 from mincrawler.storages.storage import Storage
+
+logger = logging.getLogger(__name__)
 
 
 @colt.register("twitter_tweet_crawler")
@@ -30,6 +33,8 @@ class TwittwerTweetCrawler(Crawler):
     def _run(self, storage: Storage) -> None:
         for tweets in self._crawl():
             storage.insert(tweets)
+            logger.info("%d items were inserted into %s.", len(tweets),
+                        repr(storage))
 
     def _get_url(self, params: tp.Dict[str, tp.Any] = None) -> str:
         if params is None:
@@ -52,9 +57,14 @@ class TwittwerTweetCrawler(Crawler):
         num_requests = 0
         while num_requests < max_requests:
             url = self._get_url(params)
+            logger.debug("request url: %s", url)
 
             response = httpx.get(url, auth=self._auth)
+            logger.debug("status code: %s", response.status_code)
+
             tweets = response.json()["statuses"]
+            logger.debug("tweet ids: %s",
+                         ", ".join(str(x["id"]) for x in tweets))
 
             if not tweets:
                 break

@@ -1,5 +1,6 @@
 import datetime
 import json
+import logging
 import typing as tp
 import uuid
 from pathlib import Path
@@ -7,6 +8,8 @@ from pathlib import Path
 import colt
 
 from mincrawler.storages.storage import Storage
+
+logger = logging.getLogger(__name__)
 
 
 @colt.register("file_storage")
@@ -21,13 +24,16 @@ class FileStorage(Storage):
 
         self.path.mkdir(exist_ok=True)
 
+    def __repr__(self) -> str:
+        return f"<FileStorage: path={self.path}>"
+
     @property
     def path(self) -> Path:
         return self._path
 
     def get_unique_filename(self) -> str:
         while True:
-            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S%f")
             unique_id = uuid.uuid4().hex
             name = f"{timestamp}_{unique_id}"
 
@@ -35,6 +41,7 @@ class FileStorage(Storage):
                 return name
 
     def insert(self, data: tp.List[tp.Dict[str, tp.Any]]) -> None:
+
         for item in data:
             if self._unique_key is None:
                 filename = self.get_unique_filename()
@@ -48,3 +55,5 @@ class FileStorage(Storage):
 
             with open(self.path / filename, "w") as f:
                 json.dump(item, f)
+
+            logger.debug("save file: %s", str(path))

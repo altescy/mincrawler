@@ -1,4 +1,5 @@
 import argparse
+import logging
 from pathlib import Path
 
 import colt
@@ -6,6 +7,8 @@ import colt
 from mincrawler import __version__
 from mincrawler.utils.jsonnet import load_jsonnet
 from mincrawler.workers.worker import Worker
+
+logger = logging.getLogger(__name__)
 
 
 def main(prog: str = None):
@@ -29,6 +32,8 @@ def main(prog: str = None):
 
     config = load_jsonnet(args.config_path)
     colt.import_modules(args.module)
+
+    logger.info("config: %s", repr(config))
 
     worker = colt.build(config)
 
