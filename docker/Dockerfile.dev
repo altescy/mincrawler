@@ -3,10 +3,11 @@ FROM python:3.8
 ENV LC_ALL=C.UTF-8
 ENV LANG=C.UTF-8
 
-COPY ./dev-requirements.txt ./dev-requirements.txt
+WORKDIR /work
+ADD . ./
+
 RUN pip install poetry
 RUN poetry install
 
-WORKDIR /work
 
 CMD ["/bin/bash"]
