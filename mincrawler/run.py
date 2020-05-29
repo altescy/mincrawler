@@ -3,6 +3,8 @@ import logging
 import os
 import sys
 
+import colt
+
 if os.environ.get("MINCRAWLER_DEBUG"):
     LEVEL = logging.DEBUG
 else:
@@ -17,6 +19,7 @@ from mincrawler.cli import main  # pylint: disable=wrong-import-position
 
 
 def run():
+    colt.import_modules(["mincrawler"])
     main(prog="mincrawler")
 
 
