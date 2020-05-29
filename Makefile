@@ -3,6 +3,7 @@ PYTHON=poetry run python
 MYPY=poetry run mypy
 PYLINT=poetry run pylint
 PYLINTRC=.pylintrc
+MYPYINI=mypy.ini
 PYTEST=poetry run pytest
 MODULE=mincrawler
 DOCKER=docker
@@ -15,7 +16,7 @@ lint:
 	$(PYLINT) --rcfile=$(PYLINTRC) $(MODULE)
 
 mypy:
-	$(MYPY) $(MODULE)
+	$(MYPY) --config-file $(MYPYINI) $(MODULE)
 
 test:
 	PYTHONPATH=$(PWD) $(PYTEST)
