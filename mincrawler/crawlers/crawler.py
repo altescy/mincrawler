@@ -1,5 +1,3 @@
-import typing as tp
-
 from mincrawler.storages.storage import Storage
 
 
