@@ -4,9 +4,12 @@ import typing as tp
 import uuid
 from pathlib import Path
 
+import colt
+
 from mincrawler.storages.storage import Storage
 
 
+@colt.register("file_storage")
 class FileStorage(Storage):
     def __init__(self,
                  path: tp.Union[Path, str],
@@ -15,6 +18,8 @@ class FileStorage(Storage):
         self._path = Path(path)
         self._unique_key = unique_key
         self._exist_ok = exist_ok
+
+        self.path.mkdir(exist_ok=True)
 
     @property
     def path(self) -> Path:
