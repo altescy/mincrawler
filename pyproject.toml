@@ -1,8 +1,12 @@
 [tool.poetry]
 name = "mincrawler"
-version = "0.1.0"
-description = ""
+version = "0.0.1"
+description = "A minimal web crawler."
 authors = ["altescy <altescy@fastmail.com>"]
+license = "MIT"
+repository = "https://github.com/altescy/mincrawler"
+readme = "README.rst"
+keywords = ["crawler", "scraping"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
