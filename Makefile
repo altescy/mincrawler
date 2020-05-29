@@ -1,6 +1,9 @@
 PWD=$(shell pwd)
-PYTHON=python
+PYTHON=poetry run python
+MYPY=poetry run mypy
+PYLINT=poetry run pylint
 PYLINTRC=.pylintrc
+PYTEST=poetry run pytest
 MODULE=mincrawler
 DOCKER=docker
 DOCKERFILE=$(PWD)/docker/Dockerfile.dev
@@ -9,13 +12,13 @@ DOCKER_CONTAINER=mincrawler-dev-container
 
 
 lint:
-	pylint --rcfile=$(PYLINTRC) $(MODULE)
+	$(PYLINT) --rcfile=$(PYLINTRC) $(MODULE)
 
 mypy:
-	mypy $(MODULE)
+	$(MYPY) $(MODULE)
 
 test:
-	PYTHONPATH=$(PWD) pytest
+	PYTHONPATH=$(PWD) $(PYTEST)
 
 clean: clean-pyc clean-build
 
