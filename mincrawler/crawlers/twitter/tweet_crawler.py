@@ -28,8 +28,8 @@ class TwittwerTweetCrawler(Crawler):
         self._params = params
 
     def _run(self, storage: Storage) -> None:
-        tweets = self._crawl()
-        storage.insert(tweets)
+        for tweets in self._crawl():
+            storage.insert(tweets)
 
     def _get_url(self, params: tp.Dict[str, tp.Any] = None) -> str:
         if params is None:
@@ -45,23 +45,20 @@ class TwittwerTweetCrawler(Crawler):
             return float("inf")
         return self._max_requests
 
-    def _crawl(self) -> tp.List[tp.Dict[str, tp.Any]]:
+    def _crawl(self) -> tp.Iterator[tp.List[tp.Dict[str, tp.Any]]]:
         max_requests = self._get_max_requests()
         params = copy.deepcopy(self._params)
-        tweets: tp.List[tp.Dict[str, tp.Any]] = []
 
         num_requests = 0
         while num_requests < max_requests:
             url = self._get_url(params)
             response = httpx.get(url, auth=self._auth)
-            data = response.json()["statuses"]
+            tweets = response.json()["statuses"]
 
-            if not data:
-                return tweets
-
-            tweets.extend(data)
+            if not tweets:
+                yield tweets
 
             params["max_id"] = tweets[-1]["id"] - 1
             num_requests += 1
 
-        return tweets
+        yield tweets

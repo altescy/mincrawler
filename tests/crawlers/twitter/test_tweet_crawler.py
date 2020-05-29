@@ -17,5 +17,5 @@ class TestTwitterTweetCrawler:
                                        count=1,
                                        max_requests=1,
                                        **self.auth_tokens)
-        tweets = crawler._crawl()  # pylint:disable=protected-access
+        tweets = list(crawler._crawl())  # pylint:disable=protected-access
         assert len(tweets) == 1
