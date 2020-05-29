@@ -13,13 +13,16 @@ python = "^3.8"
 colt = "^0.4.0"
 httpx = "^0.13.3"
 Authlib = "^0.14.3"
+jsonnet = "^0.16.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
+mypy = "^0.770"
+pylint = "^2.5.2"
 
+[tool.poetry.scripts]
+mincrawler = "mincrawler.run:run"
 [build-system]
 requires = ["poetry>=0.12"]
 build-backend = "poetry.masonry.api"
 
-[tool.poetry.scripts]
-mincrawler = "mincrawler.run:run"
