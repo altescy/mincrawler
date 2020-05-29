@@ -1,8 +1,21 @@
 import json
+import logging
 import os
 import typing as tp
 
-from _jsonnet import evaluate_file
+try:
+    from _jsonnet import evaluate_file
+except ImportError:
+
+    def evaluate_file(filename: str, **_kwargs) -> str:
+        logger.warning(
+            "error loading _jsonnet (this is expected on Windows), "
+            "treating %s as plain json", filename)
+        with open(filename, "r") as evaluation_file:
+            return evaluation_file.read()
+
+
+logger = logging.getLogger(__name__)
 
 
 def _is_encodable(value: str) -> bool:
