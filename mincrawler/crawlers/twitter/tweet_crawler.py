@@ -36,7 +36,7 @@ class TwittwerTweetCrawler(Crawler):
             params = self._params
 
         base_url = self.TWEET_SEARCH_URL.format(version=self._version)
-        query_string = urlencode(self._params)
+        query_string = urlencode(params)
 
         return f"{base_url}?{query_string}"
 
@@ -52,13 +52,14 @@ class TwittwerTweetCrawler(Crawler):
         num_requests = 0
         while num_requests < max_requests:
             url = self._get_url(params)
+
             response = httpx.get(url, auth=self._auth)
             tweets = response.json()["statuses"]
 
             if not tweets:
-                yield tweets
+                break
+
+            yield tweets
 
             params["max_id"] = tweets[-1]["id"] - 1
             num_requests += 1
-
-        yield tweets
