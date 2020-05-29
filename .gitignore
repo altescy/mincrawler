@@ -18,3 +18,7 @@ __pycache__
 # testing and continuous integration
 
 .pytest_cache/
+
+
+# others
+.env
