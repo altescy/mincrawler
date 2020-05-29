@@ -33,7 +33,7 @@ def main(prog: str = None):
     config = load_jsonnet(args.config_path)
     colt.import_modules(args.module)
 
-    logger.info("config: %s", repr(config))
+    logger.debug("config: %s", repr(config))
 
     worker = colt.build(config)
 
