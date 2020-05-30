@@ -14,6 +14,7 @@ colt = "^0.4.0"
 httpx = "^0.13.3"
 Authlib = "^0.14.3"
 jsonnet = "^0.16.0"
+tinydb = "^4.1.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
