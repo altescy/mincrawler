@@ -1,59 +1,74 @@
-import datetime
 import json
 import logging
 import typing as tp
-import uuid
 from pathlib import Path
 
 import colt
 
+from mincrawler.item import Item
 from mincrawler.storages.storage import Storage
+from mincrawler.storages.storage import ItemDuplicationError, ItemNotFoundError
 
 logger = logging.getLogger(__name__)
 
 
 @colt.register("file_storage")
 class FileStorage(Storage):
-    def __init__(self,
-                 path: tp.Union[Path, str],
-                 unique_key: str = None,
-                 exist_ok: bool = False):
-        self._path = Path(path)
-        self._unique_key = unique_key
-        self._exist_ok = exist_ok
+    def __init__(self, root: tp.Union[Path, str], overwrite: bool = False):
+        self._root = Path(root)
+        self._overwrite = overwrite
 
-        self.path.mkdir(exist_ok=True)
+        self.root.mkdir(exist_ok=True)
 
     def __repr__(self) -> str:
-        return f"<FileStorage: path={self.path}>"
+        return f"<FileStorage: path={self.root}>"
 
     @property
-    def path(self) -> Path:
-        return self._path
+    def root(self) -> Path:
+        return self._root
 
-    def get_unique_filename(self) -> str:
-        while True:
-            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S%f")
-            unique_id = uuid.uuid4().hex
-            name = f"{timestamp}_{unique_id}"
+    def _get_collection_path(self, collection: str) -> Path:
+        return self.root / collection
 
-            if not (self.path / name).exists():
-                return name
+    def _get_item_path(self, collection: str, item: Item) -> Path:
+        return self._get_collection_path(collection) / item.id
 
-    def insert(self, data: tp.List[tp.Dict[str, tp.Any]]) -> None:
+    def _create_collection(self, collection: str) -> None:
+        self._get_collection_path(collection).mkdir(exist_ok=True)
 
-        for item in data:
-            if self._unique_key is None:
-                filename = self.get_unique_filename()
-            else:
-                filename = str(item[self._unique_key])
+    def insert(self, collection: str, item: Item) -> None:
+        self._create_collection(collection)
 
-            path = self.path / filename
+        path = self._get_item_path(collection, item)
 
-            if not self._exist_ok and path.exists():
-                continue
+        if path.exists():
+            raise ItemDuplicationError(f"Item id {item.id} already exists.")
 
-            with open(self.path / filename, "w") as f:
-                json.dump(item, f)
+        with path.open("w") as f:
+            json.dump(item.to_dict(), f)
 
-            logger.debug("save file: %s", str(path))
+        logger.debug("save file: %s", str(path))
+
+    def upsert(self, collection: str, item: Item) -> None:
+        self._create_collection(collection)
+
+        path = self._get_item_path(collection, item)
+
+        with path.open("w") as f:
+            json.dump(item.to_dict(), f)
+
+        logger.debug("save file: %s", str(path))
+
+    def exists(self, collection: str, item: Item) -> bool:
+        return self._get_item_path(collection, item).exists()
+
+    def get(self, collection: str, item_id: str) -> Item:
+        path = self._get_collection_path(collection) / item_id
+
+        if not path.exists():
+            raise ItemNotFoundError(f"Item ( {item_id} ) not found.")
+
+        with path.open("r") as f:
+            item = Item.from_dict(json.load(f))
+
+        return item

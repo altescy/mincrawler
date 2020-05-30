@@ -8,7 +8,7 @@ import httpx
 from authlib.integrations.httpx_client import OAuth1Auth
 
 from mincrawler.crawlers.crawler import Crawler
-from mincrawler.storages.storage import Storage
+from mincrawler.item import Item
 
 logger = logging.getLogger(__name__)
 
@@ -30,11 +30,12 @@ class TwittwerTweetCrawler(Crawler):
         self._version = version
         self._params = params
 
-    def _run(self, storage: Storage) -> None:
+    def _run(self) -> tp.Iterator[Item]:
         for tweets in self._crawl():
-            storage.insert(tweets)
-            logger.info("%d items were inserted into %s.", len(tweets),
-                        repr(storage))
+            for tweet in tweets:
+                item_id = str(tweet["id"])
+                content = tweet
+                yield Item(item_id, content)
 
     def _get_url(self, params: tp.Dict[str, tp.Any] = None) -> str:
         if params is None:

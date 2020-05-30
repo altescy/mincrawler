@@ -1,9 +1,11 @@
-from mincrawler.storages.storage import Storage
+import typing as tp
+
+from mincrawler.item import Item
 
 
 class Crawler:
-    def __call__(self, storage: Storage) -> None:
-        self._run(storage)
+    def __call__(self) -> tp.Iterator[Item]:
+        return self._run()
 
-    def _run(self, storage: Storage) -> None:
+    def _run(self) -> tp.Iterator[Item]:
         raise NotImplementedError

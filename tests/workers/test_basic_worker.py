@@ -3,6 +3,7 @@ from pathlib import Path
 import tempfile
 
 from mincrawler.crawlers.twitter import TwittwerTweetCrawler
+from mincrawler.pipelines import StoreItem
 from mincrawler.storages import FileStorage
 from mincrawler.workers import BasicWorker
 
@@ -18,16 +19,16 @@ class TestBasicWorker:
         }
 
     def test_run(self):
-        with tempfile.TemporaryDirectory() as path:
-            path = Path(path)
+        with tempfile.TemporaryDirectory() as root:
+            root = Path(root)
 
-            crawler = TwittwerTweetCrawler(q="from:altescy",
-                                           count=2,
+            crawler = TwittwerTweetCrawler(q="python",
+                                           count=5,
                                            max_requests=1,
                                            **self.auth_tokens)
-            storage = FileStorage(path, unique_key="id")
-            worker = BasicWorker(crawler, storage)
+            pipelines = [StoreItem(FileStorage(root), "tweets")]
+            worker = BasicWorker(crawler, pipelines)
 
             worker()
 
-            assert len(list(path.glob("*"))) == 2
+            assert len(list(root.glob("tweets/*"))) == 5

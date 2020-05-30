@@ -1,20 +1,24 @@
 from pathlib import Path
 import tempfile
 
+from mincrawler.item import Item
 from mincrawler.storages import FileStorage
 
 
 class TestFileStorage:
     def setup(self):
         # pylint:disable=attribute-defined-outside-init
-        self.data = [{"id": 123, "text": "foo"}, {"id": 456, "text": "bar"}]
+        self.data = [
+            Item("123", {"text": "foo"}),
+            Item("456", {"text": "bar"})
+        ]
 
     def test_insert(self):
-        with tempfile.TemporaryDirectory() as path:
-            path = Path(path)
+        with tempfile.TemporaryDirectory() as root:
+            root = Path(root)
 
-            storage = FileStorage(path, unique_key="id")
-            storage.insert(self.data)
+            storage = FileStorage(root)
+            storage.insert_many("test", self.data)
 
-            assert (path / "123").exists()
-            assert (path / "456").exists()
+            assert (root / "test" / "123").exists()
+            assert (root / "test" / "456").exists()
