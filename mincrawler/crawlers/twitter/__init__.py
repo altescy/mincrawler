@@ -1,1 +1,1 @@
-from mincrawler.crawlers.twitter.tweet_crawler import TwittwerTweetCrawler
+from mincrawler.crawlers.twitter.tweet_search import TwittwerTweetSearchCrawler

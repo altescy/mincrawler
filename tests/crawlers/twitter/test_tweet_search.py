@@ -1,8 +1,8 @@
 import os
-from mincrawler.crawlers.twitter import TwittwerTweetCrawler
+from mincrawler.crawlers.twitter import TwittwerTweetSearchCrawler
 
 
-class TestTwitterTweetCrawler:
+class TestTwitterTweetSearchCrawler:
     def setup(self):
         # pylint:disable=attribute-defined-outside-init
         self.auth_tokens = {
@@ -13,9 +13,9 @@ class TestTwitterTweetCrawler:
         }
 
     def test_crawl(self):
-        crawler = TwittwerTweetCrawler(q="from:altescy",
-                                       count=1,
-                                       max_requests=1,
-                                       **self.auth_tokens)
+        crawler = TwittwerTweetSearchCrawler(q="python",
+                                             count=1,
+                                             max_requests=1,
+                                             **self.auth_tokens)
         tweets = list(crawler._crawl())  # pylint:disable=protected-access
         assert len(tweets) == 1

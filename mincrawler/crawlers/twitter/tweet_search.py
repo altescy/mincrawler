@@ -13,8 +13,8 @@ from mincrawler.item import Item
 logger = logging.getLogger(__name__)
 
 
-@colt.register("twitter_tweet_crawler")
-class TwittwerTweetCrawler(Crawler):
+@colt.register("twitter_tweet_search")
+class TwittwerTweetSearchCrawler(Crawler):
     TWEET_SEARCH_URL = "https://api.twitter.com/{version}/search/tweets.json"
 
     def __init__(self,
@@ -56,21 +56,23 @@ class TwittwerTweetCrawler(Crawler):
         params = copy.deepcopy(self._params)
 
         num_requests = 0
+        url = self._get_url(params)
         while num_requests < max_requests:
-            url = self._get_url(params)
             logger.debug("request url: %s", url)
 
             response = httpx.get(url, auth=self._auth)
             logger.debug("status code: %s", response.status_code)
 
             tweets = response.json()["statuses"]
+            meta = response.json()["search_metadata"]
             logger.debug("tweet ids: %s",
                          ", ".join(str(x["id"]) for x in tweets))
 
-            if not tweets:
-                break
-
             yield tweets
 
-            params["max_id"] = tweets[-1]["id"] - 1
+            if "next_results" not in meta:
+                break
+
+            url = self.TWEET_SEARCH_URL.format(version=self._version) \
+                    + meta["next_results"]
             num_requests += 1
