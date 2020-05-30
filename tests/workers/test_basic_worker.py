@@ -33,5 +33,3 @@ class TestBasicWorker:
             worker = BasicWorker(crawler, pipelines)
 
             worker()
-
-            assert len(list(root.glob("tweets/*"))) == 3
