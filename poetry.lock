@@ -276,6 +276,17 @@ pyparsing = ">=2.0.2"
 six = "*"
 
 [[package]]
+category = "main"
+description = "Retrieve YouTube content and metadata"
+name = "pafy"
+optional = false
+python-versions = "*"
+version = "0.5.5"
+
+[package.extras]
+youtube-dl-backend = ["youtube-dl"]
+
+[[package]]
 category = "dev"
 description = "plugin and hook calling mechanisms for python"
 name = "pluggy"
@@ -422,8 +433,16 @@ optional = false
 python-versions = "*"
 version = "1.12.1"
 
+[[package]]
+category = "main"
+description = "YouTube video downloader"
+name = "youtube-dl"
+optional = false
+python-versions = "*"
+version = "2020.5.29"
+
 [metadata]
-content-hash = "57967bc97ea924a45a0182e3213d5bffdd54d0ecafca7a4a716dd6ce4f8e9e46"
+content-hash = "118f6004b8192a614aaea08d0ac70d0f411b1e67c4a43daf4fa87b8b09cb2faa"
 python-versions = "^3.8"
 
 [metadata.files]
@@ -604,6 +623,10 @@ packaging = [
     {file = "packaging-20.4-py2.py3-none-any.whl", hash = "sha256:998416ba6962ae7fbd6596850b80e17859a5753ba17c32284f67bfff33784181"},
     {file = "packaging-20.4.tar.gz", hash = "sha256:4357f74f47b9c12db93624a82154e9b120fa8293699949152b22065d556079f8"},
 ]
+pafy = [
+    {file = "pafy-0.5.5-py2.py3-none-any.whl", hash = "sha256:769e35aa6988686d47fa2ab235d15c9952c7873c470f6a6b05cf6bcd93e62515"},
+    {file = "pafy-0.5.5.tar.gz", hash = "sha256:364f1d1312c89582d97dc7225cf6858cde27cb11dfd64a9c2bab1a2f32133b1e"},
+]
 pluggy = [
     {file = "pluggy-0.13.1-py2.py3-none-any.whl", hash = "sha256:966c145cd83c96502c3c3868f50408687b38434af77734af1e9ca461a4081d2d"},
     {file = "pluggy-0.13.1.tar.gz", hash = "sha256:15b2acde666561e1298d71b523007ed7364de07029219b604cf808bfa1c765b0"},
@@ -682,4 +705,8 @@ wcwidth = [
 ]
 wrapt = [
     {file = "wrapt-1.12.1.tar.gz", hash = "sha256:b62ffa81fb85f4332a4f609cab4ac40709470da05643a082ec1eb88e6d9b97d7"},
+]
+youtube-dl = [
+    {file = "youtube_dl-2020.5.29-py2.py3-none-any.whl", hash = "sha256:2d45840772ecc57e151b0be78dd89e9772b6aa29295746be38abb9c30dad5bb3"},
+    {file = "youtube_dl-2020.5.29.tar.gz", hash = "sha256:1a3d84afa851dce2fccc2dfc0f9ffa0e22314ffba6d528b34b4a7fe3e0cf2264"},
 ]
