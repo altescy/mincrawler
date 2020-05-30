@@ -3,6 +3,9 @@ import typing as tp
 
 
 class Item:
+    ITEM_ID_KEY = "item_id"
+    CONTENT_KEY = "content"
+
     def __init__(self, item_id: str, content: tp.Dict[str, tp.Any]) -> None:
         self._item_id = item_id
         self._content = content
@@ -35,13 +38,13 @@ class Item:
 
     def to_dict(self) -> tp.Dict[str, tp.Any]:
         return {
-            "item_id": self._item_id,
-            "content": self._content,
+            self.ITEM_ID_KEY: self._item_id,
+            self.CONTENT_KEY: self._content,
         }
 
     @classmethod
     def from_dict(cls, item_dict: tp.Dict[str, tp.Any]) -> Item:
         return cls(
-            item_id=item_dict["item_id"],
-            content=item_dict["content"],
+            item_id=item_dict[cls.ITEM_ID_KEY],
+            content=item_dict[cls.CONTENT_KEY],
         )
