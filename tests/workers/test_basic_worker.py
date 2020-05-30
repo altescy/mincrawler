@@ -24,6 +24,9 @@ class TestBasicWorker:
 
             crawler = TwittwerTweetSearchCrawler(q="python",
                                                  count=3,
+                                                 lang="ja",
+                                                 locale="ja",
+                                                 result_type="recent",
                                                  max_requests=1,
                                                  **self.auth_tokens)
             pipelines = [StoreItem(FileStorage(root), "tweets")]
