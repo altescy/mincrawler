@@ -98,7 +98,7 @@ description = "A configuration utility for Python object."
 name = "colt"
 optional = false
 python-versions = ">=3.7.3"
-version = "0.4.0"
+version = "0.5.0"
 
 [[package]]
 category = "main"
@@ -607,7 +607,7 @@ python-versions = "*"
 version = "1.12.1"
 
 [metadata]
-content-hash = "49f74f4ff62c093a63542a9c8528fa962e4c15fcc8cbb3600b90026bdaaf6032"
+content-hash = "cca51d40d9db675c2ce8948c298153ec5dc2bc9ca416dc3cf692e0fc67b3c230"
 python-versions = "^3.8"
 
 [metadata.files]
@@ -674,8 +674,8 @@ colorama = [
     {file = "colorama-0.4.3.tar.gz", hash = "sha256:e96da0d330793e2cb9485e9ddfd918d456036c7149416295932478192f4436a1"},
 ]
 colt = [
-    {file = "colt-0.4.0-py3-none-any.whl", hash = "sha256:7f9498515ffa1810ec59d29daceb70517b6cf7e05a1035d66af410ac18fe51f2"},
-    {file = "colt-0.4.0.tar.gz", hash = "sha256:1bf1a0d76a7b9b4c5295747adf327e0e22871cf8d86e5933e06be4230f3be058"},
+    {file = "colt-0.5.0-py3-none-any.whl", hash = "sha256:3827d52ad9f809b0b6769f2a96810ac4f670489100a713636a1f3bb9231a5890"},
+    {file = "colt-0.5.0.tar.gz", hash = "sha256:76cb490b7dab675b0a823f6bf776867eafacc3f6636cfd07024d8bf0fa57c8fc"},
 ]
 cryptography = [
     {file = "cryptography-2.9.2-cp27-cp27m-macosx_10_9_x86_64.whl", hash = "sha256:daf54a4b07d67ad437ff239c8a4080cfd1cc7213df57d33c97de7b4738048d5e"},
