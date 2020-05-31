@@ -1,5 +1,5 @@
 import os
-from mincrawler.crawlers.youtube import YouTubeVideoCrawler
+from mincrawler.crawlers.youtube import YouTubeChannelVideoCrawler
 
 
 class TestYouTubeVideoCrawler:
@@ -9,5 +9,5 @@ class TestYouTubeVideoCrawler:
         self.apikey = os.environ["YOUTUBE_API_KEY"]
 
     def test_crawl(self):
-        crawler = YouTubeVideoCrawler(self.channels, self.apikey)
+        crawler = YouTubeChannelVideoCrawler(self.apikey, self.channels)
         _video = crawler()

@@ -15,8 +15,7 @@ httpx = "^0.13.3"
 Authlib = "^0.14.3"
 jsonnet = "^0.16.0"
 tinydb = "^4.1.1"
-pafy = "^0.5.5"
-youtube-dl = "^2020.5.29"
+google-api-python-client = "^1.8.4"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
