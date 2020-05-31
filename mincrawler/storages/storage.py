@@ -16,7 +16,7 @@ class Storage:
 
     def upsert_many(self, collection: str, items: tp.List[Item]) -> None:
         for item in items:
-            self.insert(collection, item)
+            self.upsert(collection, item)
 
     def exists(self, collection: str, item: Item) -> bool:
         raise NotImplementedError

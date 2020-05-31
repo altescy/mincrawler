@@ -21,18 +21,10 @@ class TinyDBStorage(Storage):
         table = self._db.table(collection)
         table.insert(item.to_dict())
 
-    def insert_many(self, collection: str, items: tp.List[Item]) -> None:
-        for item in items:
-            self.insert(collection, item)
-
     def upsert(self, collection: str, item: Item) -> None:
         table = self._db.table(collection)
         query = Query()
         table.upsert(item.to_dict(), query[Item.ITEM_ID_KEY] == item.id)
-
-    def upsert_many(self, collection: str, items: tp.List[Item]) -> None:
-        for item in items:
-            self.insert(collection, item)
 
     def exists(self, collection: str, item: Item) -> bool:
         table = self._db.table(collection)
