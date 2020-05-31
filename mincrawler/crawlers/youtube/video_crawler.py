@@ -16,11 +16,13 @@ class YouTubeChannelVideoCrawler(YouTubeCrawler):
     def __init__(self,
                  apikey: str,
                  channels: tp.List[str],
+                 max_workers: int = 1,
                  version: str = "v3",
                  max_results: int = 5,
                  max_requests: int = None) -> None:
         super().__init__(apikey, version, max_results, max_requests)
         self._channel_ids = channels
+        self._max_workers = max_workers
 
     @staticmethod
     def _build_item(video_dict: tp.Dict[str, tp.Any]) -> Item:
@@ -30,7 +32,8 @@ class YouTubeChannelVideoCrawler(YouTubeCrawler):
 
     def _run(self) -> tp.Iterator[Item]:
         channels: tp.List[tp.Dict[str, tp.Any]] = []
-        with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
+        with concurrent.futures.ThreadPoolExecutor(
+                max_workers=self._max_workers) as executor:
             futures: tp.List[concurrent.futures.Future] = []
 
             for batch_ids in generate_batch(self._channel_ids,
@@ -54,7 +57,9 @@ class YouTubeChannelVideoCrawler(YouTubeCrawler):
                 playlistId=playlist_id)
         ]
 
-        with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
+        videos: tp.List[tp.Dict[str, tp.Any]] = []
+        with concurrent.futures.ThreadPoolExecutor(
+                max_workers=self._max_workers) as executor:
             futures = []
 
             for batch_ids in generate_batch(video_ids, self._max_results):
@@ -63,5 +68,7 @@ class YouTubeChannelVideoCrawler(YouTubeCrawler):
                 futures.append(future)
 
             for future in concurrent.futures.as_completed(futures):
-                for video_dict in future.result():
-                    yield self._build_item(video_dict)
+                videos.extend(future.result())
+
+        for video_dict in videos:
+            yield self._build_item(video_dict)
