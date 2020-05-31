@@ -1,9 +1,7 @@
 import copy
 import typing as tp
 
-from apiclient.discovery import build
-from googleapiclient.discovery import Resource
-from googleapiclient.http import HttpRequest
+from googleapiclient.discovery import build
 
 from mincrawler.crawlers.crawler import Crawler
 from mincrawler.item import Item
@@ -26,7 +24,7 @@ class YouTubeCrawler(Crawler):
     def _run(self) -> tp.Iterator[Item]:
         raise NotImplementedError
 
-    def _get_list(self, resource: Resource,
+    def _get_list(self, resource,
                   **kwargs) -> tp.Iterator[tp.Dict[str, tp.Any]]:
         if "part" not in kwargs:
             kwargs["part"] = "id,snippet,contentDetails"
@@ -47,8 +45,7 @@ class YouTubeCrawler(Crawler):
             request = resource.list_next(request, response)
             num_requests += 1
 
-    def _get_batch(self, resource: Resource,
-                   **kwargs) -> tp.List[tp.Dict[str, tp.Any]]:
+    def _get_batch(self, resource, **kwargs) -> tp.List[tp.Dict[str, tp.Any]]:
         if "part" not in kwargs:
             kwargs["part"] = "id,snippet,contentDetails"
 
@@ -61,21 +58,27 @@ class YouTubeCrawler(Crawler):
         return tp.cast(tp.List[tp.Dict[str, tp.Any]], response["items"])
 
     def _get_videos(self, **kwargs) -> tp.Iterator[tp.Dict[str, tp.Any]]:
-        yield from self._get_list(self._api.videos(), **kwargs)
+        resource = getattr(self._api, "videos")()
+        yield from self._get_list(resource, **kwargs)
 
     def _get_channels(self, **kwargs) -> tp.Iterator[tp.Dict[str, tp.Any]]:
-        yield from self._get_list(self._api.channels(), **kwargs)
+        resource = getattr(self._api, "channels")()
+        yield from self._get_list(resource, **kwargs)
 
     def _get_playlist_items(self,
                             **kwargs) -> tp.Iterator[tp.Dict[str, tp.Any]]:
-        yield from self._get_list(self._api.playlistItems(), **kwargs)
+        resource = getattr(self._api, "playlistItems")()
+        yield from self._get_list(resource, **kwargs)
 
     def _get_video_batch(self, **kwargs) -> tp.List[tp.Dict[str, tp.Any]]:
-        return self._get_batch(self._api.videos(), **kwargs)
+        resource = getattr(self._api, "videos")()
+        return self._get_batch(resource, **kwargs)
 
     def _get_channel_batch(self, **kwargs) -> tp.List[tp.Dict[str, tp.Any]]:
-        return self._get_batch(self._api.channels(), **kwargs)
+        resource = getattr(self._api, "channels")()
+        return self._get_batch(resource, **kwargs)
 
     def _get_playlist_item_batch(self,
                                  **kwargs) -> tp.List[tp.Dict[str, tp.Any]]:
-        return self._get_batch(self._api.playlistItems(), **kwargs)
+        resource = getattr(self._api, "playlistItems")()
+        return self._get_batch(resource, **kwargs)

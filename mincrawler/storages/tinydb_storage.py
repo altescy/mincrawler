@@ -1,5 +1,3 @@
-import typing as tp
-
 import colt
 from tinydb import TinyDB, Query
 
