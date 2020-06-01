@@ -1,9 +1,11 @@
 import typing as tp
 
+import colt
+
 from mincrawler.item import Item
 
 
-class Storage:
+class Storage(colt.Registrable):
     def insert(self, collection: str, item: Item) -> None:
         raise NotImplementedError
 

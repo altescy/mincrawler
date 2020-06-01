@@ -1,13 +1,11 @@
 import typing as tp
 
-import colt
-
 from mincrawler.item import Item
 from mincrawler.pipelines.pipeline import Pipeline
 from mincrawler.storages.storage import Storage
 
 
-@colt.register("drop_duplicate")
+@Pipeline.register("drop_duplicate")
 class DropDuplicate(Pipeline):
     def __init__(self, storage: Storage, collection: str) -> None:
         self._storage = storage

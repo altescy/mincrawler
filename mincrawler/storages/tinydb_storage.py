@@ -1,4 +1,3 @@
-import colt
 from tinydb import TinyDB, Query
 
 from mincrawler.item import Item
@@ -6,7 +5,7 @@ from mincrawler.storages.storage import Storage
 from mincrawler.storages.storage import ItemDuplicationError, ItemNotFoundError
 
 
-@colt.register("tinydb_storage")
+@Storage.register("tinydb")
 class TinyDBStorage(Storage):
     def __init__(self, path: str) -> None:
         self._path = path

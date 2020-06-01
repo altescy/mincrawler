@@ -1,15 +1,16 @@
 import logging
 import typing as tp
 
-import colt
 import httpx
+
+from mincrawler.crawlers.crawler import Crawler
 from mincrawler.crawlers.twitter.twitter_crawler import TwitterCrawler
 from mincrawler.item import Item
 
 logger = logging.getLogger(__name__)
 
 
-@colt.register("twitter_tweet_search")
+@Crawler.register("twitter_tweet_search")
 class TwittwerTweetSearchCrawler(TwitterCrawler):
     RESOURCE_URL = "https://api.twitter.com/{version}/search/tweets.json"
 

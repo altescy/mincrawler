@@ -35,8 +35,6 @@ def main(prog: str = None):
 
     logger.debug("config: %s", repr(config))
 
-    worker = colt.build(config)
-
-    assert isinstance(worker, Worker)
+    worker = colt.build(config, Worker)
 
     worker()

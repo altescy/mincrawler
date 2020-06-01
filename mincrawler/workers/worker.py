@@ -1,11 +1,13 @@
 import typing as tp
 
+import colt
+
 from mincrawler.crawlers.crawler import Crawler
 from mincrawler.item import Item
 from mincrawler.pipelines.pipeline import Pipeline
 
 
-class Worker:
+class Worker(colt.Registrable):
     def __init__(self,
                  crawler: Crawler,
                  pipelines: tp.List[Pipeline] = None) -> None:

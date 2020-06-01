@@ -1,3 +1,4 @@
+import concurrent.futures
 import copy
 import typing as tp
 
@@ -5,6 +6,7 @@ from googleapiclient.discovery import build
 
 from mincrawler.crawlers.crawler import Crawler
 from mincrawler.item import Item
+from mincrawler.utils.batch import generate_batch
 
 
 class YouTubeCrawler(Crawler):
@@ -14,12 +16,14 @@ class YouTubeCrawler(Crawler):
                  apikey: str,
                  version: str = "v3",
                  max_results: int = 5,
-                 max_requests: int = None):
+                 max_requests: int = None,
+                 max_workers: int = 1):
         self._apikey = apikey
         self._version = version
         self._api = build(self.API_SERVICE_NAME, version, developerKey=apikey)
         self._max_results = max_results
         self._max_requests = max_requests
+        self._max_workers = max_workers
 
     def _run(self) -> tp.Iterator[Item]:
         raise NotImplementedError
@@ -82,3 +86,27 @@ class YouTubeCrawler(Crawler):
                                  **kwargs) -> tp.List[tp.Dict[str, tp.Any]]:
         resource = getattr(self._api, "playlistItems")()
         return self._get_batch(resource, **kwargs)
+
+    def _exec_batch(self,
+                    func: tp.Callable[..., tp.List[tp.Dict[str, tp.Any]]],
+                    ids: tp.List[str],
+                    batch_size: int = None,
+                    **kwargs) -> tp.List[tp.Dict[str, tp.Any]]:
+        batch_size = batch_size or self._max_results
+
+        items: tp.List[tp.Dict[str, tp.Any]] = []
+
+        with concurrent.futures.ThreadPoolExecutor(
+                max_workers=self._max_workers) as executor:
+            futures: tp.List[concurrent.futures.Future] = []
+
+            for batch_ids in generate_batch(ids, batch_size):
+                future = executor.submit(func,
+                                         id=",".join(batch_ids),
+                                         **kwargs)
+                futures.append(future)
+
+            for future in concurrent.futures.as_completed(futures):
+                items.extend(future.result())
+
+        return items

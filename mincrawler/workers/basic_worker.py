@@ -1,13 +1,11 @@
 import typing as tp
 
-import colt
-
 from mincrawler.crawlers.crawler import Crawler
 from mincrawler.pipelines.pipeline import Pipeline
 from mincrawler.workers.worker import Worker
 
 
-@colt.register("basic_worker")
+@Worker.register("basic_worker")
 class BasicWorker(Worker):
     def __init__(self,
                  crawler: Crawler,

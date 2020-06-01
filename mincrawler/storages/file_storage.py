@@ -3,8 +3,6 @@ import logging
 import typing as tp
 from pathlib import Path
 
-import colt
-
 from mincrawler.item import Item
 from mincrawler.storages.storage import Storage
 from mincrawler.storages.storage import ItemDuplicationError, ItemNotFoundError
@@ -12,7 +10,7 @@ from mincrawler.storages.storage import ItemDuplicationError, ItemNotFoundError
 logger = logging.getLogger(__name__)
 
 
-@colt.register("file_storage")
+@Storage.register("file")
 class FileStorage(Storage):
     def __init__(self, root: tp.Union[Path, str], overwrite: bool = False):
         self._root = Path(root)

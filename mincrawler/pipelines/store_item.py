@@ -1,13 +1,11 @@
 import typing as tp
 
-import colt
-
 from mincrawler.item import Item
 from mincrawler.pipelines.pipeline import Pipeline
 from mincrawler.storages.storage import Storage
 
 
-@colt.register("store_item")
+@Pipeline.register("store_item")
 class StoreItem(Pipeline):
     def __init__(self,
                  storage: Storage,
