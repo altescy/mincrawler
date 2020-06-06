@@ -36,7 +36,14 @@ class SinglePageCrawler(Crawler):
                 yield self._get_item(response)
 
     @staticmethod
-    def _get_item(response: httpx.Response) -> Item:
+    def _get_text(response: httpx.Response) -> str:
+        text = response.text
+        if response.charset_encoding is not None:
+            encoding = response.charset_encoding
+            text = text.encode(encoding).decode()
+        return text
+
+    def _get_item(self, response: httpx.Response) -> Item:
         item_id = str(response.url)
-        content = {"text": response.text}
+        content = {"text": self._get_text(response)}
         return Item(item_id, content)
