@@ -5,16 +5,24 @@ mincrawler
 [![License](https://img.shields.io/github/license/altescy/mincrawler)](https://github.com/altescy/mincrawler/blob/master/LICENSE)
 
 
+### Installation
+
+```
+pip install git+https://github.com/altescy/mincrawler
+```
+
+### Usage
+
 ```
 $ cat config.jsonnet
 local storage = {
-  "@type": "tinydb_storage",
+  "@type": "tinydb",
   "path": "storage.json",
 };
 local tweet_collection = "tweets";
 
 {
-    "@type": "basic_worker",
+    "@type": "basic",
     "crawler": {
         "@type": "twitter_tweet_search",
         "client_id": std.extVar("TWITTER_CLIENT_ID"),
@@ -26,20 +34,22 @@ local tweet_collection = "tweets";
         "count": 10,
         "max_requests": 1,
     },
-    "pipelines": [
-      {
-        "@type": "drop_duplicate",
-        "storage": storage,
-        "collection": tweet_collection,
-      },
-      {
-        "@type": "store_item",
-        "storage": storage,
-        "collection": tweet_collection,
-      },
-    ]
+    "pipeline": {
+      "@type": "basic",
+      "stages": [
+        {
+          "@type": "drop_duplicate",
+          "storage": storage,
+          "collection": tweet_collection,
+        },
+        {
+          "@type": "store_item",
+          "storage": storage,
+          "collection": tweet_collection,
+        },
+      ]
+    }
 }
-
-$ poetry run mincrawler config.jsonnet
+$ mincrawler config.jsonnet
 $ cat storage.json | jq ".tweets | .[].content.text"
 ```
