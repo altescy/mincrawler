@@ -1,12 +1,12 @@
 import typing as tp
 
 from mincrawler.item import Item
-from mincrawler.pipelines.pipeline import Pipeline
+from mincrawler.pipelines.stages.stage import PipelineStage
 from mincrawler.storages.storage import Storage
 
 
-@Pipeline.register("store_item")
-class StoreItem(Pipeline):
+@PipelineStage.register("store_item")
+class StoreItem(PipelineStage):
     def __init__(self,
                  storage: Storage,
                  collection: str,

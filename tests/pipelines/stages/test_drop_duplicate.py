@@ -2,7 +2,7 @@ import tempfile
 from pathlib import Path
 
 from mincrawler.item import Item
-from mincrawler.pipelines import DropDuplicate
+from mincrawler.pipelines.stages import DropDuplicate
 from mincrawler.storages import FileStorage
 
 
