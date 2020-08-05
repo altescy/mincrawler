@@ -1,3 +1,4 @@
+from __future__ import annotations
 import typing as tp
 
 import colt
@@ -6,6 +7,12 @@ from mincrawler.item import Item
 
 
 class Storage(colt.Registrable):
+    def __enter__(self) -> Storage:
+        return self
+
+    def __exit__(self, *args) -> None:
+        return None
+
     def insert(self, collection: str, item: Item) -> None:
         raise NotImplementedError
 
@@ -13,8 +20,18 @@ class Storage(colt.Registrable):
         for item in items:
             self.insert(collection, item)
 
-    def upsert(self, collection: str, item: Item) -> None:
+    def update(self, collection: str, item: Item) -> None:
         raise NotImplementedError
+
+    def update_many(self, collection: str, items: tp.List[Item]) -> None:
+        for item in items:
+            self.update(collection, item)
+
+    def upsert(self, collection: str, item: Item) -> None:
+        if self.exists(collection, item):
+            self.update(collection, item)
+        else:
+            self.insert(collection, item)
 
     def upsert_many(self, collection: str, items: tp.List[Item]) -> None:
         for item in items:
