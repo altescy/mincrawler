@@ -2,7 +2,7 @@
 
 .eggs/
 .mypy_cache
-colt.egg-info/
+mincrawler.egg-info/
 build/
 dist/
 pip-wheel-metadata/
@@ -22,3 +22,4 @@ __pycache__
 
 # others
 .env
+.venv
