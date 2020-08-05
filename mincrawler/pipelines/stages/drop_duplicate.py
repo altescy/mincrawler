@@ -14,7 +14,8 @@ class DropDuplicate(PipelineStage):
     def _run(self, item: Item) -> tp.Optional[Item]:
         collection = self._collection
 
-        if self._storage.exists(collection, item):
-            return None
+        with self._storage as storage:
+            if storage.exists(collection, item):
+                return None
 
         return item

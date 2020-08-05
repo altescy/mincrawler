@@ -16,9 +16,10 @@ class StoreItem(PipelineStage):
         self._overwrite = overwrite
 
     def _run(self, item: Item) -> tp.Optional[Item]:
-        item_exists = self._storage.exists(self._collection, item)
+        with self._storage as storage:
+            item_exists = self._storage.exists(self._collection, item)
 
-        if self._overwrite or not item_exists:
-            self._storage.upsert(self._collection, item)
+            if self._overwrite or not item_exists:
+                storage.upsert(self._collection, item)
 
         return item
