@@ -5,7 +5,7 @@ import tempfile
 from mincrawler.crawlers.twitter import TwittwerTweetSearchCrawler
 from mincrawler.pipelines.stages import StoreItem
 from mincrawler.pipelines.executors import BasicPipelineExecutor
-from mincrawler.storages import FileStorage
+from mincrawler.storages import FileStorage, TinyDBStorage
 from mincrawler.workers import BasicWorker
 
 
@@ -19,7 +19,7 @@ class TestBasicWorker:
             "token_secret": os.environ["TWITTER_TOKEN_SECRET"],
         }
 
-    def test_basic_worker(self):
+    def test_basic_worker_with_file_storage(self):
         with tempfile.TemporaryDirectory() as root:
             root = Path(root)
 
@@ -32,6 +32,23 @@ class TestBasicWorker:
                                                  **self.auth_tokens)
             pipeline = BasicPipelineExecutor(
                 [StoreItem(FileStorage(root), "tweets")])
+            worker = BasicWorker(crawler, pipeline)
+
+            worker()
+
+    def test_basic_worker_with_tinydb_storage(self):
+        with tempfile.TemporaryDirectory() as root:
+            path = Path(root) / "test.json"
+
+            crawler = TwittwerTweetSearchCrawler(q="python",
+                                                 count=3,
+                                                 lang="ja",
+                                                 locale="ja",
+                                                 result_type="recent",
+                                                 max_requests=1,
+                                                 **self.auth_tokens)
+            pipeline = BasicPipelineExecutor(
+                [StoreItem(TinyDBStorage(path), "tweets")])
             worker = BasicWorker(crawler, pipeline)
 
             worker()
