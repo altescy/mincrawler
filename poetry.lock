@@ -546,6 +546,14 @@ python-versions = ">=3.5,<4.0"
 version = "4.1.1"
 
 [[package]]
+category = "main"
+description = "Atomic transactions for TinyDB"
+name = "tinyrecord"
+optional = false
+python-versions = ">=3.5"
+version = "0.2.0"
+
+[[package]]
 category = "dev"
 description = "Python Library for Tom's Obvious, Minimal Language"
 name = "toml"
@@ -607,7 +615,8 @@ python-versions = "*"
 version = "1.12.1"
 
 [metadata]
-content-hash = "cca51d40d9db675c2ce8948c298153ec5dc2bc9ca416dc3cf692e0fc67b3c230"
+content-hash = "3666c67c3a7c2eadd488a5b8debb5961041d9a284f4b54871cabe753733c8305"
+lock-version = "1.0"
 python-versions = "^3.8"
 
 [metadata.files]
@@ -894,6 +903,7 @@ pytz = [
     {file = "pytz-2020.1.tar.gz", hash = "sha256:c35965d010ce31b23eeb663ed3cc8c906275d6be1a34393a1d73a41febf4a048"},
 ]
 requests = [
+    {file = "requests-2.23.0-py2.7.egg", hash = "sha256:5d2d0ffbb515f39417009a46c14256291061ac01ba8f875b90cad137de83beb4"},
     {file = "requests-2.23.0-py2.py3-none-any.whl", hash = "sha256:43999036bfa82904b6af1d99e4882b560e5e2c68e5c4b0aa03b655f3d7d73fee"},
     {file = "requests-2.23.0.tar.gz", hash = "sha256:b3f43d496c6daba4493e7c431722aeb7dbc6288f52a6e04e7b6023b0247817e6"},
 ]
@@ -916,6 +926,9 @@ sniffio = [
 tinydb = [
     {file = "tinydb-4.1.1-py3-none-any.whl", hash = "sha256:68eb9d1b32931ea657319c7dff70c0d735fc10ecbde29c824a2a5e1333b8ed49"},
     {file = "tinydb-4.1.1.tar.gz", hash = "sha256:1b8d7308ba2fe6d582c6ae69f33c62013053939f7ab8d1787b1e15950566a202"},
+]
+tinyrecord = [
+    {file = "tinyrecord-0.2.0.tar.gz", hash = "sha256:eb6dc23601be359ee00f5a3d31a46adf3bad0a16f8d60af216cd67982ca75cf4"},
 ]
 toml = [
     {file = "toml-0.10.1-py2.py3-none-any.whl", hash = "sha256:bda89d5935c2eac546d648028b9901107a595863cb36bae0c73ac804a9b4ce88"},
