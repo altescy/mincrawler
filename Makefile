@@ -1,28 +1,28 @@
-PWD=$(shell pwd)
-PYTHON=poetry run python
-MYPY=poetry run mypy
-PYLINT=poetry run pylint
-PYLINTRC=.pylintrc
-MYPYINI=mypy.ini
-PYTEST=poetry run pytest
-MODULE=mincrawler
-DOCKER=docker
-DOCKERFILE=$(PWD)/docker/Dockerfile.dev
-DOCKER_IMAGE=mincrawler-dev
-DOCKER_CONTAINER=mincrawler-dev-container
+PWD      := $(shell pwd)
+PYTHON   := poetry run python
+PYTEST   := poetry run pytest
+PYSEN    := poetry run pysen
+MODULE   := metamaker
 
+.PHONY: all
+all: format lint test
 
-lint:
-	$(PYLINT) --rcfile=$(PYLINTRC) $(MODULE)
-
-mypy:
-	$(MYPY) --config-file $(MYPYINI) $(MODULE)
-
+.PHONY: test
 test:
 	PYTHONPATH=$(PWD) $(PYTEST)
 
+.PHONY: lint
+lint:
+	PYTHONPATH=$(PWD) $(PYSEN) run lint
+
+.PHONY: format
+format:
+	PYTHONPATH=$(PWD) $(PYSEN) run format
+
+.PHONY: clean
 clean: clean-pyc clean-build
 
+.PHONY: clean-pyc
 clean-pyc:
 	rm -rf .pytest_cache
 	rm -rf .mypy_cache
@@ -31,22 +31,9 @@ clean-pyc:
 	find . -name '*~' -exec rm -f {} +
 	find . -name '__pycache__' -exec rm -fr {} +
 
+.PHONY: clean-build
 clean-build:
 	rm -rf build/
 	rm -rf dist/
-	rm -rf $(MODULE).egg-info/
+	rm -rf *.egg-info/
 	rm -rf pip-wheel-metadata/
-
-docker: docker-build docker-run
-
-docker-build:
-	$(DOCKER) build -f $(DOCKERFILE) -t $(DOCKER_IMAGE) $(PWD)
-
-docker-run:
-	$(DOCKER) run -it -v $(PWD):/work --name $(DOCKER_CONTAINER) $(DOCKER_IMAGE)
-
-docker-attach:
-	$(DOCKER) attach $(DOCKER_CONTAINER)
-
-docker-rm:
-	$(DOCKER) rm $(DOCKER_CONTAINER)
